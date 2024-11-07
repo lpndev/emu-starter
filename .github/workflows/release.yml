@@ -1,0 +1,35 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create release folder
+        run: |
+          mkdir -p Emulator
+          cp -r bios config emulators roms saves Emulator/
+
+      - name: Remove .gitkeep files
+        run: |
+          find Emulator -name ".gitkeep" -type f -delete
+
+      - name: Create ZIP archive
+        run: zip -r release.zip Emulator
+
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: release.zip
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

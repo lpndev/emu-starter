@@ -15,15 +15,15 @@ jobs:
 
       - name: Create release folder
         run: |
-          mkdir -p Emulator
-          cp -r bios config emulators roms saves Emulator/
+          mkdir -p Emulation
+          cp -r bios config emulators roms saves Emulation/
 
       - name: Remove .gitkeep files
         run: |
-          find Emulator -name ".gitkeep" -type f -delete
+          find Emulation -name ".gitkeep" -type f -delete
 
       - name: Create ZIP archive
-        run: zip -r release.zip Emulator
+        run: zip -r release.zip Emulation
 
       - name: Create Release
         id: create_release

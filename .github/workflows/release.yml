@@ -23,13 +23,22 @@ jobs:
           find Emulation -name ".gitkeep" -type f -delete
 
       - name: Create ZIP archive
-        run: zip -r release.zip Emulation
+        run: zip -r Emulation.zip Emulation
+
+      - name: Generate checksums
+        run: |
+          echo "SHA256:" > checksums.txt
+          sha256sum Emulation.zip >> checksums.txt
+          echo -e "\nSHA512:" >> checksums.txt
+          sha512sum Emulation.zip >> checksums.txt
 
       - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
-          files: release.zip
+          files: |
+            Emulation.zip
+            checksums.txt
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
